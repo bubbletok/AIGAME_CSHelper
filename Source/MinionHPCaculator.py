@@ -1,5 +1,6 @@
 from enum import IntEnum
 import datetime
+import math
 
 class MinionType(IntEnum):
     Melee = 0
@@ -25,6 +26,8 @@ def CaculateHP(type:MinionType, time:float) -> float:
         hp = CaculateSiegeHP(time)
     else:
         raise WrongMinionTypeError()
+
+    hp = math.floor(hp)
     return hp
 
 def CaculateMeleeHP(time:float) -> float:
@@ -123,3 +126,7 @@ def PrintAllHP():
         time += 30
 
     #HPsheet.close()
+
+'''Test'''
+#print(CaculateHP(MinionType.Caster, 1290))
+#PrintAllHP()
