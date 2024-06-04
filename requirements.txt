@@ -1,2 +1,5 @@
+numpy==1.26.4
+opencv-python==4.10.0.82
+packaging==24.0
 pillow==10.3.0
-pygame==2.5.2
+pytesseract==0.3.10
