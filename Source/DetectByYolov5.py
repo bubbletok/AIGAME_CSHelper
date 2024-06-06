@@ -18,8 +18,8 @@ name_path = os.path.join('results')
 results_path = os.path.join(project_path, name_path)
 def detect():
     delete_results()
-    im = ImageGrab.grab(bbox=(320, 180, WIDTH, HEIGHT))
-    im.save(source_path)
+    # im = ImageGrab.grab(bbox=(320, 180, WIDTH, HEIGHT))
+    # im.save(source_path)
 
     os.system(f"python {detect_path} --weights {weight_path} --source screen --data {data_path} --save-txt --project {project_path} --name {name_path}")
     delete_results()

@@ -6,7 +6,6 @@ pytesseract==0.3.10
 pyautogui==0.9.53
 pyscreenshot==2.3
 pywin32==306
-win32api==300.0.0
 # YOLOv5 requirements
 # Usage: pip install -r requirements.txt
 
