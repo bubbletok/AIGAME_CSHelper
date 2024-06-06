@@ -1,12 +1,13 @@
 import HPBarProcessor
 import MinionHPCaculator
 import PIL.Image
+import MinionHPBarConnector
 
-def IsLastHit(hpBarImg:PIL.Image, attackDamage:float, minionType:MinionHPCaculator.MinionType, currentTime:float)->bool:
+def IsLastHit(minion:MinionHPBarConnector.Minion, attackDamage:int, currentTime:float)->bool:
     isLastHit = False
 
-    hpByTime = MinionHPCaculator.CaculateHP(minionType, currentTime)
-    hpRatio = HPBarProcessor.CaculateHpRatio(hpBarImg)
+    hpByTime = MinionHPCaculator.CaculateHP(minion.type, currentTime)
+    hpRatio = HPBarProcessor.CaculateHpRatio(minion.hpBar.img)
 
     hp = round(hpByTime * hpRatio)
 
@@ -18,6 +19,10 @@ def IsLastHit(hpBarImg:PIL.Image, attackDamage:float, minionType:MinionHPCaculat
 
     return isLastHit
 
-testImg = PIL.Image.open("Data/HPBar_test.png")
+if __name__ == '__main__':
+    testImg = PIL.Image.open("Data/HPBar_test.png")
 
-print(IsLastHit(testImg, 600, MinionHPCaculator.MinionType.Melee, 300))
+    testHPBar = MinionHPBarConnector.HPBar(testImg, (0,0,0,0))
+    testMinion = MinionHPBarConnector.Minion(0, (0,0,0,0), testHPBar)
+
+    print(IsLastHit(testMinion, 600, 300))
