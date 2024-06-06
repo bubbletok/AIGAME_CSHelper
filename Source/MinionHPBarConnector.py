@@ -10,8 +10,8 @@ class HPBar:
 
         self.x = box[0]
         self.y = box[1]
-        self.w = box[2]
-        self.h = box[3]
+        self.w = box[2] - box[0]
+        self.h = box[3] - box[1]
         self.pos = (self.x+self.w/2, self.y+self.h/2)
 
 class Minion:
@@ -21,8 +21,8 @@ class Minion:
 
         self.x = box[0]
         self.y = box[1]
-        self.w = box[2]
-        self.h = box[3]
+        self.w = box[2] - box[0]
+        self.h = box[3] - box[1]
         self.pos = (self.x+self.w/2, self.y+self.h/2)
 
 
