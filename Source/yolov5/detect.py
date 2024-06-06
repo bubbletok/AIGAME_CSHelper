@@ -35,6 +35,16 @@ import platform
 import sys
 from pathlib import Path
 
+
+import sys
+ 
+# setting path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+import MinionHPBarConnector
+import LastHitChecker
+import PIL.Image
+
 import torch
 
 import pathlib
@@ -247,6 +257,24 @@ def run(
 
                         drawer.rect(bbox[0], bbox[1], bbox[2] - bbox[0], bbox[3] - bbox[1], colors(c, True))
 
+                        ''' Minion-HPBar connection Sample Code
+                        minionList = []
+                        hpBarList = []
+                        attackDamage = 600
+                        currentTime = 300
+                        if c == 3:
+                            img = PIL.image()
+                            hpBar = MinionHPBarConnector.HPBar(img, bbox)
+                        else:
+                            minion = MinionHPBarConnector.Minion(c, bbox)
+                        
+                        MinionHPBarConnector.connect(minionList, hpBarList)
+
+                        for minion in minionList:
+                            if(LastHitChecker.IsLastHit(minion, attackDamage, currentTime)):
+                                drawer.rect(minion.x, minion.y, minion.w, minion.h, colors(minion.type, True))
+                        '''
+                        
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / "crops" / names[c] / f"{p.stem}.jpg", BGR=True)
 
