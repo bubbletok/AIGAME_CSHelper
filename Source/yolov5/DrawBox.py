@@ -1,4 +1,4 @@
-import win32gui, win32api
+from win32 import win32gui, win32api
 import math
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
