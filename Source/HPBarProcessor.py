@@ -5,7 +5,7 @@ black = (0,0,0,255)
 
 def is_similar_color(color1, color2, threshold=200):
     return all(abs(c1 - c2) < threshold for c1, c2 in zip(color1, color2))
-def SimplizeImage(img:PIL.Image) -> PIL.Image:
+def SimplifyImage(img:PIL.Image) -> PIL.Image:
     pixels = img.load()
 
     for y in range(img.height):
@@ -20,7 +20,7 @@ def SimplizeImage(img:PIL.Image) -> PIL.Image:
 
 
 def CaculateHpRatio(image:PIL.Image) -> float:
-    img = SimplizeImage(image)
+    img = SimplifyImage(image)
     ratio = 0
     barOffsetX = 0
     HPEndX = 0
