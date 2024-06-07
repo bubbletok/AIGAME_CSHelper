@@ -40,7 +40,7 @@ def FindHpBar(minion:Minion, hpBarList:list[HPBar]):
                 continue
     minion.hpBar = nearestBar
 
-def connect(minionList:list[Minion], hpBarList:list[HPBar]):
+def Connect(minionList:list[Minion], hpBarList:list[HPBar]):
     for elem in minionList:
         if elem.hpBar == None:
             FindHpBar(elem, hpBarList)

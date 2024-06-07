@@ -263,12 +263,12 @@ def run(
                         attackDamage = 600
                         currentTime = 300
                         if c == 3:
-                            img = PIL.image()
+                            img = PIL.image() #assign detected HPBar Image
                             hpBar = MinionHPBarConnector.HPBar(img, bbox)
                         else:
                             minion = MinionHPBarConnector.Minion(c, bbox)
                         
-                        MinionHPBarConnector.connect(minionList, hpBarList)
+                        MinionHPBarConnector.Connect(minionList, hpBarList)
 
                         for minion in minionList:
                             if(LastHitChecker.IsLastHit(minion, attackDamage, currentTime)):
