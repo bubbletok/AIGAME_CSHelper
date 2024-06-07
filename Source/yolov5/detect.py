@@ -265,8 +265,10 @@ def run(
                         if c == 3:
                             img = PIL.image() #assign detected HPBar Image
                             hpBar = MinionHPBarConnector.HPBar(img, bbox)
+                            hpBarlist.append(hpBar)
                         else:
                             minion = MinionHPBarConnector.Minion(c, bbox)
+                            minionList.append(minion)
                         
                         MinionHPBarConnector.Connect(minionList, hpBarList)
 
