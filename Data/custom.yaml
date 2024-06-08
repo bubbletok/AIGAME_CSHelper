@@ -1,0 +1,11 @@
+path: /content/drive/MyDrive/AI_GAME/pratice3/datasets # dataset root dir
+train: train.txt # train images (relative to 'path') 128 images
+val: test.txt # val images (relative to 'path') 128 images
+test: test.txt # test images (optional)
+
+# Classes
+names:
+  0: Melee
+  1: Range
+  2: Cannon
+  3: HpBar
