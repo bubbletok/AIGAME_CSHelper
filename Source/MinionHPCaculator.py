@@ -36,6 +36,7 @@ def CaculateMeleeHP(time:float) -> float:
     targetWaveNum = TimeToWave(time)
 
     while(waveNum < targetWaveNum):
+        print(waveNum)
         if(waveNum>=4 and (waveNum-1)%3==0):
             if((waveNum) <= 15):
                 hp = round(hp+22+((waveNum-1)/3)*0.3, 1)

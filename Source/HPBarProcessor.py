@@ -26,8 +26,9 @@ def CaculateHpRatio(image:PIL.Image) -> float:
     HPEndX = 0
     HPWidth = 0
     HPValue = 0
-
+    print("simple image",img)
     barOffsetX = CheckBarStart(img)
+    print("bar offsetx",barOffsetX)
     HPEndX = CheckHPEnd(img, barOffsetX)
 
     HPWidth = img.width - 2 * barOffsetX
@@ -39,12 +40,15 @@ def CaculateHpRatio(image:PIL.Image) -> float:
     return ratio
 
 def CheckBarStart(img:PIL.Image) -> int:
+    img.show()
     for x in range(img.width):
         checkColor = img.getpixel((x,img.height/2))
         if checkColor == targetColor:
             return x
 
 def CheckHPEnd(img:PIL.Image, offset:int) -> int:
+    print(img)
+    print(offset)
     for x in range(offset, img.width):
         checkColor = img.getpixel((x,img.height/2))
         if checkColor == black:

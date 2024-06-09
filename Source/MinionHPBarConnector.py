@@ -26,15 +26,17 @@ class Minion:
         self.pos = (self.x+self.w/2, self.y+self.h/2)
 
 
-def DistanceBetween(pos1:list[float,float], pos2:list[float,float]):
-    return math.sqrt(math.pow(pos1[0]-pos2[0], 2) + math.pow(pos1[1] - pos2[1]))
+
+def DistanceBetween(pos1:tuple[float,float], pos2:tuple[float,float]):
+    return math.sqrt(math.pow(pos1[0]-pos2[0], 2) + math.pow(pos1[1] - pos2[1], 2))
 
 def FindHpBar(minion:Minion, hpBarList:list[HPBar]):
     nearestDistance = 9999
     nearestBar = None
     for bar in hpBarList:
-        if DistanceBetween(minion.pos, bar.pos) < connectionThreshold:
-            if DistanceBetween < nearestDistance:
+        distance = DistanceBetween(minion.pos, bar.pos)
+        if  distance < connectionThreshold:
+            if distance < nearestDistance:
                 nearestBar = bar
             else:
                 continue

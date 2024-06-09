@@ -11,9 +11,9 @@ def IsLastHit(minion:MinionHPBarConnector.Minion, attackDamage:int, currentTime:
 
     hp = round(hpByTime * hpRatio)
 
-    print(hpByTime)
-    print(hpRatio)
-    print(hp)
+    # print(hpByTime)
+    # print(hpRatio)
+    # print(hp)
 
     isLastHit = (hp < attackDamage)
 
