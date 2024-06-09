@@ -1,6 +1,7 @@
 from enum import IntEnum
 import datetime
 import math
+from MinionsException import *
 
 class MinionType(IntEnum):
     Melee = 0
@@ -9,12 +10,6 @@ class MinionType(IntEnum):
 
 minionInitialHP = [477,296,912] # HP of minions when spawned first
 meleeMinionHPPlus= [33,34,35,34,35,36,35,36,36,37,36,37,38,37,38,39,38,39,39,40]
-
-class WrongMinionTypeError(Exception):
-    def __init__(self):
-        self.msg = "minion type must be Melee(0), Caster(1), or Seige(2)"
-    def __str__(self):
-        return self.msg
 
 def CaculateHP(type:MinionType, time:float) -> float:
     hp = 0
@@ -129,5 +124,6 @@ def PrintAllHP():
     #HPsheet.close()
 
 '''Test'''
-#print(CaculateHP(MinionType.Caster, 1290))
-#PrintAllHP()
+if __name__ == '__main__':
+    print(CaculateHP(4, 1290))
+    PrintAllHP()
