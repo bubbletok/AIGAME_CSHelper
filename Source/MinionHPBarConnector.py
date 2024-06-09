@@ -25,8 +25,6 @@ class Minion:
         self.h = box[3] - box[1]
         self.pos = (self.x+self.w/2, self.y+self.h/2)
 
-
-
 def DistanceBetween(pos1:tuple[float,float], pos2:tuple[float,float]):
     return math.sqrt(math.pow(pos1[0]-pos2[0], 2) + math.pow(pos1[1] - pos2[1], 2))
 
