@@ -67,12 +67,12 @@ def FindTopLeft(img:PIL.Image) -> list[int,int]:
             elif current_color[0:3] != black and count < img.width/2:
                 count = 0
     
-    raise PixelNotFound()
+    return result
 
 def FindBottomRight(img:PIL.Image) -> list[int,int]:
     pixels = img.load()
     count = 0
-    result = (0,0)
+    result = (img.width-1,img.height-1)
 
     for y in range(img.height-1, -1, -1):
         for x in range(img.width-1, -1, -1):
@@ -86,7 +86,7 @@ def FindBottomRight(img:PIL.Image) -> list[int,int]:
             elif current_color[0:3] != black and count < img.width/2:
                 count = 0
 
-    raise PixelNotFound()
+    return result
 
 def CaculateHpRatio(image:PIL.Image) -> float:
     img = SimplifyImage(image)
