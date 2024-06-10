@@ -20,6 +20,9 @@ hp_bar_path = 'runs/detect/exp/crops/HpBar'
 model = torch.hub.load('ultralytics/yolov5','custom',path='Data/Weights/best.pt', force_reload=True, trust_repo=True)
 draw_cls = draw()
 
+time_num = 0
+attack_num = 0
+
 while True:
 
     # 지난 결과 이미지 삭제
@@ -30,23 +33,31 @@ while True:
     box1 = (430,910,465,940) # attack
     box2 = (1855,32,1900,50) # time
 
-    attack_num = text_recognition(*box1)
+    attack_text = text_recognition(*box1)
     time_text = text_recognition(*box2)
-
-    time_num = re.findall(r'\d+',time_text)
-    time_num = ''.join(time_num)
-    time_num = int(time_num)
-    time_num = (time_num//100)*60 + time_num%60
-    print("#################")
     
-    draw_cls.rect(*box1)
-    draw_cls.rect(*box2)
+    if time_text != None: # 잘 인식 된 경우
+        # 잘못 인식된 기호 삭제
+        time_text = re.findall(r'\d+',time_text)
+        time_text = ''.join(time_text)
+        time_text = int(time_text)
+        time_text = (time_text//100)*60 + time_text%60
+        if time_num == 0:
+            time_num = time_text
+            
+        # 숫자 잘 인식된 경우
+        elif time_text-time_num < 10:
+            time_num = time_text
+            
+    if attack_text != None: # 잘 인식 된 경우
+        # 잘못 인식된 기호 삭제
+        attack_text = re.findall(r'\d+',attack_text)
+        attack_text = ''.join(attack_text)
+        attack_num = int(attack_text)
+    
+    # draw_cls.rect(*box1)
+    # draw_cls.rect(*box2)
 
-    # attack_num = re.findall(r'\d+',attack_text)
-    # print("attack num",attack_num)
-    # attack_num = ''.join(attack_num)
-    # print("attack num",attack_num)
-    # attack_num = int(attack_num)
 
 
 
