@@ -7,14 +7,13 @@ def IsLastHit(minion:MinionHPBarConnector.Minion, attackDamage:int, currentTime:
     isLastHit = False
 
     hpByTime = MinionHPCaculator.CaculateHP(minion.type, currentTime)
+    # print(f"hpByTime: {hpByTime}")
     hpRatio = HPBarProcessor.CaculateHpRatio(minion.hpBar.img)
-
+    # print(f"hpRatio: {hpRatio}")
+    hpRatio = 1.0 if hpRatio > 1.0 else hpRatio
     hp = round(hpByTime * hpRatio)
 
-    # print(hpByTime)
-    # print(hpRatio)
-    # print(hp)
-
+    # print(f"hp: {hp}, attackDamage: {attackDamage}")
     isLastHit = (hp < attackDamage)
 
     return isLastHit

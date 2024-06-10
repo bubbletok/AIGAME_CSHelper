@@ -3,6 +3,8 @@ from MinionsException import *
 
 targetColor = (255, 0, 0)
 black = (0,0,0)
+hp_bar_color1 = (220, 99, 99)
+hp_bar_color2 = (132, 62, 59)
 
 def is_similar_color(color1, color2, threshold=200):
     return all(abs(c1 - c2) < threshold for c1, c2 in zip(color1, color2))
@@ -25,15 +27,15 @@ def SimplifyImage(img:PIL.Image) -> PIL.Image:
 
 def HPBarOutliner(img:PIL.Image) -> PIL.Image:
     pixels = img.load()
-
     # hpbar outline
     for y in range(img.height):
         for x in range(img.width):
             current_color = pixels[x, y]
-            if is_similar_color(current_color[0:3], black, 50):
+            # print(current_color)
+            if is_similar_color(current_color[0:3], black, 50) :
                 pixels[x, y] = black
-    #img.show()
-
+    # img.show()
+    img.save("Data/HPBar_outline_test.png")
     hpbarTopLeft = FindTopLeft(img)
     hpbarBottomRight = FindBottomRight(img)
     
@@ -41,13 +43,17 @@ def HPBarOutliner(img:PIL.Image) -> PIL.Image:
     #print(hpbarBottomRight)
 
     # crop img using outline
-    try:
+    # try:
+    # print(hpbarTopLeft, hpbarBottomRight)
+    result = img
+    if not (hpbarTopLeft[0] > hpbarBottomRight[0] or hpbarTopLeft[1] > hpbarBottomRight[1]):
         result = img.crop((hpbarTopLeft[0], hpbarTopLeft[1], hpbarBottomRight[0]+1, hpbarBottomRight[1]+1))
-    except Exception as e:
-        print(e)
+    # except Exception as e:
+    #     print(e)
+    #     return Null
 
     #result.show()
-
+    result.save("Data/HPBar_result_test.png")
     return result
 
 def FindTopLeft(img:PIL.Image) -> list[int,int]:
@@ -90,7 +96,7 @@ def FindBottomRight(img:PIL.Image) -> list[int,int]:
 
 def CaculateHpRatio(image:PIL.Image) -> float:
     img = SimplifyImage(image)
-
+    img.save("Data/HPBar_simplified_test.png")
     ratio = 0
     barOffsetX = 0
     HPEndX = 0

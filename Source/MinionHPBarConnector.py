@@ -2,7 +2,7 @@ import MinionHPCaculator
 import PIL.Image
 import math
 
-connectionThreshold = 50
+connectionThreshold = 100
 
 class HPBar:
     def __init__(self, image:PIL.Image, box:list):
@@ -33,12 +33,14 @@ def FindHpBar(minion:Minion, hpBarList:list[HPBar]):
     nearestBar = None
     for bar in hpBarList:
         distance = DistanceBetween(minion.pos, bar.pos)
+        # print(f"distance: {distance}")
         if  distance < connectionThreshold:
             if distance < nearestDistance:
                 nearestBar = bar
             else:
                 continue
     minion.hpBar = nearestBar
+    # print(minion.hpBar)
 
 def Connect(minionList:list[Minion], hpBarList:list[HPBar]):
     for elem in minionList:

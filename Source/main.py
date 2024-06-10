@@ -35,8 +35,8 @@ while True:
 
     attack_text = text_recognition(*box1)
     time_text = text_recognition(*box2)
-    
-    if time_text != None: # 잘 인식 된 경우
+
+    if time_text != None and time_text != '': # 잘 인식 된 경우
         # 잘못 인식된 기호 삭제
         time_text = re.findall(r'\d+',time_text)
         time_text = ''.join(time_text)
@@ -49,7 +49,7 @@ while True:
         elif time_text-time_num < 10:
             time_num = time_text
             
-    if attack_text != None: # 잘 인식 된 경우
+    if attack_text != None and attack_text!='': # 잘 인식 된 경우
         # 잘못 인식된 기호 삭제
         attack_text = re.findall(r'\d+',attack_text)
         attack_text = ''.join(attack_text)
@@ -105,17 +105,20 @@ while True:
             hp_bar_lst.append(hp_bar)
             hp_bar_var += 1
 
-        x1,y1,x2,y2 = pd.iloc[i,:4].astype(int) # box xy
-        draw_cls.rect(x1,y1,x2,y2) # box그리기
+        # x1,y1,x2,y2 = pd.iloc[i,:4].astype(int) # box xy
+        # draw_cls.rect(x1,y1,x2,y2) # box그리기
         
     
     Connect(minion_lst,hp_bar_lst)
 
     
 
+    attack_num = 200
+    time_num = 200
     # check islastattack
     for i in minion_lst:
         if i.hpBar != None: # hpbar 인식 되었다면
+            # print("lower hp")
             if IsLastHit(i,attack_num,time_num): # 막타 타이밍 이면
                 x1,y1=i.x,i.y
                 x2 = i.w + x1
@@ -125,5 +128,5 @@ while True:
 
 
 
-    time.sleep(1)
+    # time.sleep(0.1)
         

@@ -25,7 +25,7 @@ def detect():
     with mss.mss() as sct:
         img=sct.shot(mon=1, output="main_mon.png")
 
-    os.system(f"python {detect_path} --weights {weight_path} --source screen --data {data_path} --save-txt --project {project_path} --name {name_path}")
+    os.system(f"python {detect_path} --weights {weight_path} --source screen --data {data_path} --nosave --save-txt --project {project_path} --name {name_path} --device 0")
     
     
 def delete_results():

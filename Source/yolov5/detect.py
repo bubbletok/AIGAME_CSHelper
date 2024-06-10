@@ -82,6 +82,17 @@ from utils.torch_utils import select_device, smart_inference_mode
 # import DrawBox
 import DrawBox
 
+# import AutoClicker
+import AutoClicker
+
+# import MinionHpBarConnector
+from MinionHPBarConnector import *
+
+# import ImageGrab
+from PIL import ImageGrab
+
+
+
 @smart_inference_mode()
 def run(
     weights=ROOT / "yolov5s.pt",  # model path or triton URL
@@ -115,6 +126,10 @@ def run(
 ):
     # Drawer
     drawer = DrawBox.drawer()
+
+    # AutoClicker
+    clicker = AutoClicker.AutoClicker()
+
 
     source = str(source)
     save_img = not nosave and not source.endswith(".txt")  # save inference images
@@ -195,6 +210,8 @@ def run(
 
         # Process predictions
         for i, det in enumerate(pred):  # per image
+            minion_list = []
+            hp_bar_list = []
             seen += 1
             if webcam:  # batch_size >= 1
                 p, im0, frame = path[i], im0s[i].copy(), dataset.count
@@ -233,29 +250,42 @@ def run(
                         line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
                         with open(f"{txt_path}.txt", "a") as f:
                             f.write(("%g " * len(line)).rstrip() % line + "\n")
-
-                    if save_img or save_crop or view_img:  # Add bbox to image
-                        c = int(cls)  # integer class
-                        label = None # if hide_labels else (names[c] if hide_conf else f"{names[c]} {conf:.2f}")
-                        annotator.box_label(xyxy, label, color=colors(c, True))
-
+                    
+                    if True:
                         # draw bbox according to the xyxy using DrawBox
                         bbox = xyxy
                         if isinstance(bbox, torch.Tensor):
                             bbox = bbox.tolist()
                         bbox = [int(x) for x in bbox]
 
-                        # TODO: adjust to the dual monitor?
-                        # bbox: 4992 x 1920
-                        # target window: 1920 x 1080
-                        # bbox.x = bbox.x * 1920 / 4992
-                        # bbox.y = bbox.y * 1080 / 1920
-                        # bbox[0] = bbox[0] * 1920 // 4992
-                        # bbox[1] = bbox[1] * 1080 // 1920
-                        # bbox[2] = bbox[2] * 1920 // 4992
-                        # bbox[3] = bbox[3] * 1080 // 1920
+                        x, y, w, h = bbox[0], bbox[1], bbox[2] - bbox[0], bbox[3] - bbox[1]
+                        x, y, w, h = map(math.floor, (x, y, w, h))
+                        if(c==3): # if it is HpBar
 
-                        drawer.rect(bbox[0], bbox[1], bbox[2] - bbox[0], bbox[3] - bbox[1], colors(c, True))
+                            # save image and load it
+                            temp_im0 = annotator.result()
+                            source_path = os.path.join('Data','Images','image.png')
+                            cv2.imwrite(source_path, temp_im0)
+                            temp_im = cv2.imread(source_path)
+                            
+                            # crop image
+                            delta = 2
+                            crop_im = temp_im[y-delta:y+h+delta, x-delta:x+w+delta]
+                            crop_path = os.path.join('Data','Images','crop_image.png')
+                            cv2.imwrite(crop_path, crop_im)
+                            crop_im = cv2.cvtColor(crop_im, cv2.COLOR_RGB2BGR)
+                            hp_bar_image = PIL.Image.fromarray(crop_im)
+                            # hp_bar_image.show()
+                            hp_bar_list.append(MinionHPBarConnector.HPBar(hp_bar_image, bbox))
+                        else:
+                            minion_list.append(Minion(c, bbox))
+
+                        # drawer.rect(x, y, w, h, colors(c, True))
+
+                    if save_img or save_crop or view_img:  # Add bbox to image
+                        c = int(cls)  # integer class
+                        label = None # if hide_labels else (names[c] if hide_conf else f"{names[c]} {conf:.2f}")
+                        annotator.box_label(xyxy, label, color=colors(c, True))
 
                         ''' Minion-HPBar connection Sample Code
                         minionList = []
@@ -279,6 +309,24 @@ def run(
                         
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / "crops" / names[c] / f"{p.stem}.jpg", BGR=True)
+            # print(f"minion_list: {minion_list}")
+            # print(f"hp_bar_list: {hp_bar_list}")
+            # Connect HpBar and Minion
+            MinionHPBarConnector.Connect(minion_list, hp_bar_list)
+
+            # check islastattack
+            attack_num = 100
+            time_num = 200
+
+            for i in minion_list:
+                if i.hpBar != None: # if hpbar is recognized
+                    if LastHitChecker.IsLastHit(i,attack_num,time_num): # if it is last hit timing
+                        print("lower hp")
+                        x,y,w,h = i.x,i.y,i.w,i.h
+                        drawer.rect(x,y,w,h)
+                        x_,y_,w_,h_ = i.hpBar.x,i.hpBar.y,i.hpBar.w,i.hpBar.h
+                        drawer.rect(x_,y_,w_,h_)
+                        clicker.click(x+w//2,y+h//2)
 
             # Stream results
             im0 = annotator.result()
@@ -288,7 +336,7 @@ def run(
                     cv2.namedWindow(str(p), cv2.WINDOW_NORMAL | cv2.WINDOW_KEEPRATIO)  # allow window resize (Linux)
                     cv2.resizeWindow(str(p), im0.shape[1], im0.shape[0])
                 cv2.imshow(str(p), im0)
-                cv2.waitKey(5)  # 1 millisecond
+                cv2.waitKey(1)  # 1 millisecond
 
             # Save results (image with detections)
             if save_img:

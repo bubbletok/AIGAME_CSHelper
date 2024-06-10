@@ -15,7 +15,6 @@ class drawer:
         # color = (255,0,0) int type
         color = win32api.RGB(_color[0], _color[1], _color[2])
         x, y, w, h = map(math.floor, (x, y, w, h))
-        # print(x, y, w, h)
         for i in range(x, x + w):
             win32gui.SetPixel(self.hdc, i, y, color)
             win32gui.SetPixel(self.hdc, i, y + h, color)
