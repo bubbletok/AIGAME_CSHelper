@@ -40,7 +40,11 @@ def HPBarOutliner(img:PIL.Image) -> PIL.Image:
     #print(hpbarTopLeft)
     #print(hpbarBottomRight)
 
-    result = img.crop((hpbarTopLeft[0], hpbarTopLeft[1], hpbarBottomRight[0]+1, hpbarBottomRight[1]+1))
+    # crop img using outline
+    try:
+        result = img.crop((hpbarTopLeft[0], hpbarTopLeft[1], hpbarBottomRight[0]+1, hpbarBottomRight[1]+1))
+    except Exception as e:
+        print(e)
 
     #result.show()
 
