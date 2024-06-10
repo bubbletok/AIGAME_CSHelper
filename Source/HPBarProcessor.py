@@ -1,4 +1,5 @@
 import PIL.Image
+from MinionsException import *
 
 targetColor = (255, 0, 0)
 black = (0,0,0)
@@ -29,8 +30,9 @@ def HPBarOutliner(img:PIL.Image) -> PIL.Image:
     for y in range(img.height):
         for x in range(img.width):
             current_color = pixels[x, y]
-            if is_similar_color(current_color[0:3], black, 20):
+            if is_similar_color(current_color[0:3], black, 50):
                 pixels[x, y] = black
+    #img.show()
 
     hpbarTopLeft = FindTopLeft(img)
     hpbarBottomRight = FindBottomRight(img)
@@ -38,7 +40,13 @@ def HPBarOutliner(img:PIL.Image) -> PIL.Image:
     #print(hpbarTopLeft)
     #print(hpbarBottomRight)
 
-    result = img.crop((hpbarTopLeft[0], hpbarTopLeft[1], hpbarBottomRight[0]+1, hpbarBottomRight[1]+1))
+    # crop img using outline
+    try:
+        result = img.crop((hpbarTopLeft[0], hpbarTopLeft[1], hpbarBottomRight[0]+1, hpbarBottomRight[1]+1))
+    except Exception as e:
+        print(e)
+
+    #result.show()
 
     return result
 
@@ -58,15 +66,27 @@ def FindTopLeft(img:PIL.Image) -> list[int,int]:
                 count += 1
             elif current_color[0:3] != black and count < img.width/2:
                 count = 0
+    
+    raise PixelNotFound()
 
 def FindBottomRight(img:PIL.Image) -> list[int,int]:
     pixels = img.load()
+    count = 0
+    result = (0,0)
 
     for y in range(img.height-1, -1, -1):
         for x in range(img.width-1, -1, -1):
+            if count > img.width/2:
+                return result
             current_color = pixels[x,y]
             if current_color[0:3] == black:
-                return (x,y)
+                if count == 0:
+                    result = (x,y)
+                count += 1
+            elif current_color[0:3] != black and count < img.width/2:
+                count = 0
+
+    raise PixelNotFound()
 
 def CaculateHpRatio(image:PIL.Image) -> float:
     img = SimplifyImage(image)
@@ -94,16 +114,19 @@ def CheckBarStart(img:PIL.Image) -> int:
         if checkColor[0:3] == targetColor:
             return x
 
+    return 0
+
 def CheckHPEnd(img:PIL.Image, offset:int) -> int:
     for x in range(offset, img.width):
         checkColor = img.getpixel((x,img.height/2))
         if checkColor[0:3] == black:
             return x
 
+    return img.width
 
 '''Test'''
 if __name__ == '__main__':
-    test = PIL.Image.open("Data/HPBar_test.png")
+    test = PIL.Image.open("Data/HPBar_test6.png")
     crop = SimplifyImage(test)
+    crop.show()
     print(CaculateHpRatio(test))
-    crop.save("Data/HPBar_processed.png")
