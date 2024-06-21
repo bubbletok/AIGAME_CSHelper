@@ -108,13 +108,14 @@ while True:
         # x1,y1,x2,y2 = pd.iloc[i,:4].astype(int) # box xy
         # draw_cls.rect(x1,y1,x2,y2) # box그리기
         
-    
+    # 미니언과 hp bar 연결
     Connect(minion_lst,hp_bar_lst)
 
     
-
-    attack_num = 200
-    time_num = 200
+    # test attack_num, time_num
+    # attack_num = 200
+    # time_num = 200
+    
     # check islastattack
     for i in minion_lst:
         if i.hpBar != None: # hpbar 인식 되었다면
