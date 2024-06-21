@@ -37,16 +37,10 @@ while True:
     time_num = ''.join(time_num)
     time_num = int(time_num)
     time_num = (time_num//100)*60 + time_num%60
-    print("#################")
-    
-    draw_cls.rect(*box1)
-    draw_cls.rect(*box2)
 
-    # attack_num = re.findall(r'\d+',attack_text)
-    # print("attack num",attack_num)
-    # attack_num = ''.join(attack_num)
-    # print("attack num",attack_num)
-    # attack_num = int(attack_num)
+    attack_num = re.findall(r'\d+',attack_text)
+    attack_num = ''.join(attack_num)
+    attack_num = int(attack_num)
 
 
 
