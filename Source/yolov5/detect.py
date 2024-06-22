@@ -315,9 +315,9 @@ def run(
             MinionHPBarConnector.Connect(minion_list, hp_bar_list)
 
             # check islastattack
-            attack_num = 100
+            attack_num = 70
             time_num = 200
-
+            target_pos = ()
             for i in minion_list:
                 if i.hpBar != None: # if hpbar is recognized
                     if LastHitChecker.IsLastHit(i,attack_num,time_num): # if it is last hit timing
@@ -326,7 +326,9 @@ def run(
                         drawer.rect(x,y,w,h)
                         x_,y_,w_,h_ = i.hpBar.x,i.hpBar.y,i.hpBar.w,i.hpBar.h
                         drawer.rect(x_,y_,w_,h_)
-                        clicker.click(x+w//2,y+h//2)
+                        target_pos = (x+w//2,y+h//2)
+            if target_pos != ():
+                clicker.click(target_pos[0],target_pos[1])
 
             # Stream results
             im0 = annotator.result()
@@ -336,7 +338,7 @@ def run(
                     cv2.namedWindow(str(p), cv2.WINDOW_NORMAL | cv2.WINDOW_KEEPRATIO)  # allow window resize (Linux)
                     cv2.resizeWindow(str(p), im0.shape[1], im0.shape[0])
                 cv2.imshow(str(p), im0)
-                cv2.waitKey(1)  # 1 millisecond
+                cv2.waitKey(0)  # 1 millisecond
 
             # Save results (image with detections)
             if save_img:
